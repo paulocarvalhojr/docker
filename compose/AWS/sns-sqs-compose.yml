@@ -1,0 +1,54 @@
+version: '3.4'
+
+services:
+  sns-sqs-server:
+    image: localstack/localstack:latest
+    environment:
+      - SERVICES=sqs,sns
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=local
+      - AWS_SECRET_ACCESS_KEY=local
+      - EDGE_PORT=4566
+    ports:
+      - '4566-4597:4566-4597'
+    volumes:
+      - ./volumes/localstack:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./scripts/localstack:/etc/localstack/init/ready.d
+    networks:
+      - networks-aws
+
+networks:
+  networks-aws:
+    name: aws_network
+
+
+
+# docker compose -f sns-sqs-compose.yml --project-directory aws-sns-sqs  up -d --build
+
+# Criar o topico
+# aws sns create-topic --endpoint-url=http://localhost:4566 --name pass_order_ingress_streaming | cat
+# arn:aws:sns:us-east-1:000000000000:pass_order_ingress_streaming
+
+# Criar a fila
+# aws sqs create-queue --endpoint-url=http://localhost:4566 --queue-name pass_order_core_private_ingress | cat
+# http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/pass_order_core_private_ingress
+# arn:aws:sqs:us-east-1:000000000000:pass_order_core_private_ingress
+
+# Obtem o atributos da fila
+# aws sqs list-queues --endpoint-url=http://localhost:4566 | cat
+# aws sqs get-queue-attributes --endpoint-url=http://localhost:4566 --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/pass_order_core_private_ingress --attribute-names [QueueArn|All] | cat
+# arn:aws:sqs:us-east-1:000000000000:pass_order_core_private_ingress
+
+# Criar a subscricao
+# aws sns subscribe --endpoint-url=http://localhost:4566 --topic-arn arn:aws:sns:us-east-1:000000000000:pass_order_ingress_streaming --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:pass_order_core_private_ingress | cat
+# arn:aws:sns:us-east-1:000000000000:pass_order_ingress_streaming:5efb81f8-16be-4675-9be2-cd42c9f07340
+
+# Criar mensagem no topico
+# aws sns publish --endpoint-url=http://localhost:4566 --topic-arn arn:aws:sns:us-east-1:000000000000:pass_order_ingress_streaming --message "{\"id\":\"XXX01\",\"balance\":{\"currency\":\"BRL\",\"value\":\"9.50\"}}" | cat
+
+# Obtem itens da fila
+# aws sqs receive-message --endpoint-url=http://localhost:4566 --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/pass_order_core_private_ingress --max-number-of-messages 10 | cat 
+
+# Remove item da fila
+# aws sqs delete-message --endpoint-url=http://localhost:4566 --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/pass_order_core_private_ingress --receipt-handle ZDIxZjcxODktN2JjMi00NGUzLWIzMzAtZjEzNGNkMWJmNzQ1IGFybjphd3M6c3FzOnVzLWVhc3QtMTowMDAwMDAwMDAwMDA6ZHVtbXktcXVldWUgZTc4OGQ3YTktNGM4Ni00MGIxLThhN2YtYWQxYzkwZDc2NjdjIDE3MTc2ODEwNzUuNzMxNzUzNg==

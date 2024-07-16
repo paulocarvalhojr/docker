@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  redis:
+    image: redis
+    ports: 
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - networks-redis
+
+networks:
+  networks-redis:
+    name: redis_network
