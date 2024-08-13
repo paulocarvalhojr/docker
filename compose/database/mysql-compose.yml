@@ -7,8 +7,8 @@ services:
     image: mysql:5.7
     environment:
       MYSQL_USER: dev
-      MYSQL_ROOT_PASSWORD: strong_password
-      MYSQL_PASSWORD: strong_password
+      MYSQL_ROOT_PASSWORD: dev
+      MYSQL_PASSWORD: dev
     volumes:
       - volume-data:/var/lib/mysql
     ports:
