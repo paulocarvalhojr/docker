@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  postgres-db:
+    image: postgres:15.3
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: Teste@123
+      POSTGRES_DB: raffle_core
+    ports:
+      - "5431:5431"
+    networks:
+      - networks-database
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # Persistir dados em um volume
+
+volumes:
+  pgdata:
+  
+networks:
+  networks-database:
+    name: database
