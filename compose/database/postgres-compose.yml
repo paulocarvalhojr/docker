@@ -4,11 +4,11 @@ services:
   postgres-db:
     image: postgres:15.3
     environment:
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: Teste@123
-      POSTGRES_DB: raffle_core
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      # POSTGRES_DB: tech55_auth
     ports:
-      - "5431:5431"
+      - "5432:5432"
     networks:
       - networks-database
     volumes:
@@ -16,7 +16,8 @@ services:
 
 volumes:
   pgdata:
-  
+    driver: local
+
 networks:
   networks-database:
     name: database
