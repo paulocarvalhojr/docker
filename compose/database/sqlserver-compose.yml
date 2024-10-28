@@ -11,10 +11,10 @@ services:
     networks:
       - networks-database
     volumes:
-      - mysql-volume:/var/opt/mssql
+      - sql-volume:/var/opt/mssql
 
 volumes:
-  mysql-volume:
+  sql-volume:
 
 networks:
   networks-database:
