@@ -18,6 +18,20 @@ services:
     networks:
       - networks-aws
 
+  sns-sqs-server-admin-ui:
+    image: akilamaxi/sqs-admin-ui:v1
+    environment:
+      - AWS_ACCESS_KEY_ID=local
+      - AWS_SECRET_ACCESS_KEY=local
+      - AWS_REGION=us-east-1
+      - SQS_ENDPOINT_URL=http://sns-sqs-server:4566
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sns-sqs-server
+    networks:
+      - networks-aws
+
 networks:
   networks-aws:
     name: aws_network
