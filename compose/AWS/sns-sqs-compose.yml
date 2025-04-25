@@ -32,6 +32,16 @@ services:
     networks:
       - networks-aws
 
+  sns-server-admin-ui:
+    image: pacovk/sqs-admin
+    ports:
+      - "3999:3999"
+    environment:
+      SQS_ENDPOINT_URL: "http://localstack:4566"
+      SQS_AWS_REGION: "us-east-1"
+    depends_on:
+      - localstack
+
 networks:
   networks-aws:
     name: aws_network
@@ -66,3 +76,29 @@ networks:
 
 # Remove item da fila
 # aws sqs delete-message --endpoint-url=http://localhost:4566 --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/pass_order_core_private_ingress --receipt-handle ZDIxZjcxODktN2JjMi00NGUzLWIzMzAtZjEzNGNkMWJmNzQ1IGFybjphd3M6c3FzOnVzLWVhc3QtMTowMDAwMDAwMDAwMDA6ZHVtbXktcXVldWUgZTc4OGQ3YTktNGM4Ni00MGIxLThhN2YtYWQxYzkwZDc2NjdjIDE3MTc2ODEwNzUuNzMxNzUzNg==
+
+
+
+
+# aws sqs create-queue --endpoint-url=http://localhost:4566 --queue-name teste_acquirer_pricing | cat
+
+# aws sqs get-queue-attributes --endpoint-url=http://localhost:4566 --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/teste_acquirer_pricing --attribute-names QueueArn | cat
+
+# aws sns subscribe --endpoint-url=http://localhost:4566 --topic-arn arn:aws:sns:us-east-1:000000000000:tech55-events_acquirer_transaction_operational --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:teste_acquirer_pricing | cat
+
+
+
+# aws sns publish --endpoint-url=http://localhost:4566 --topic-arn arn:aws:sns:us-east-1:000000000000:tech55-events_acquirer_transaction_operational --message "{\"id\":\"XXX01\",\"balance\":{\"currency\":\"BRL\",\"value\":\"9.50\"}}" | cat
+
+
+
+
+
+
+# aws sqs create-queue --endpoint-url=http://localhost:4566 --queue-name teste_banking_pix | cat
+
+# aws sqs get-queue-attributes --endpoint-url=http://localhost:4566 --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/teste_banking_pix --attribute-names QueueArn | cat
+
+# aws sns subscribe --endpoint-url=http://localhost:4566 --topic-arn arn:aws:sns:us-east-1:000000000000:tech55-events_banking_pix_qrCode --protocol sqs --notification-endpoint arn:aws:sqs:us-east-1:000000000000:teste_banking_pix | cat
+
+# aws sns publish --endpoint-url=http://localhost:4566 --topic-arn arn:aws:sns:us-east-1:000000000000:tech55-events_banking_pix_qrCode --message "{\"id\":\"XXX01\",\"balance\":{\"currency\":\"BRL\",\"value\":\"9.50\"}}" | cat
