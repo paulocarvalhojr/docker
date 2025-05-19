@@ -8,6 +8,9 @@ services:
       - '8000:8000'
     networks:
       - networks-aws
+    volumes:
+      - dynamodb_data:/home/dynamodblocal/data
+    command: "-jar DynamoDBLocal.jar -sharedDb"
 
   dynamodb-admin:
     image: aaronshaf/dynamodb-admin
@@ -26,3 +29,6 @@ services:
 networks:
   networks-aws:
     name: aws_network
+
+volumes:
+  dynamodb_data:
