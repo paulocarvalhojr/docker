@@ -35,7 +35,7 @@ services:
     ports:
       - "3999:3999"
     environment:
-      SQS_ENDPOINT_URL: "http://localstack:4566"
+      SQS_ENDPOINT_URL: "http://sns-sqs-server:4566"
       SQS_AWS_REGION: "us-east-1"
     depends_on:
       - sns-sqs-server
