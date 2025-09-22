@@ -39,7 +39,9 @@ services:
       SQS_AWS_REGION: "us-east-1"
     depends_on:
       - sns-sqs-server
-
+    networks:
+      - networks-aws
+      
 networks:
   networks-aws:
     name: aws_network
