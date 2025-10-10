@@ -12,6 +12,32 @@ services:
     networks:
       - networks-azure
 
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=adm_12345678
+    ports:
+      - "1433:1433"
+    networks:
+      - networks-azure
+
+  servicebus:
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
+    volumes:
+      - "./servicebus-config.json:/ServiceBus_Emulator/ConfigFiles/servicebus-config.json"
+    ports:
+      - "5672:5672"
+      - "8083:8083"
+    environment:
+      SQL_SERVER: sqlserver  
+      MSSQL_SA_PASSWORD: adm_12345678
+      ACCEPT_EULA: "Y"
+    depends_on:
+      - sqlserver
+    networks:
+      - networks-azure
+
 networks:
   networks-azure:
     name: azure_network
